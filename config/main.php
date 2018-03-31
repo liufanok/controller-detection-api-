@@ -6,13 +6,8 @@ $db = require __DIR__ . '/db.php';
  * Application configuration shared by all test types
  */
 return [
-    'id' => 'basic-tests',
+    'id' => 'controller-detection',
     'basePath' => dirname(__DIR__),
-    'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
-    ],
-    'language' => 'en-US',
     'components' => [
         'db' => $db,
         'mailer' => [
