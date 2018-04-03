@@ -21,6 +21,15 @@ function returnData($code, $message = 'success', $data = null)
     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     \Yii::$app->response->content = json_encode($returnData);
 
+    //写入日志
+    $info = [
+        'USER' => \Yii::$app->user->identity->username ? : '',
+        'SERVER_NAME' => $_SERVER['SERVER_NAME'],
+        'REQUEST_URI' => $_SERVER['REQUEST_URI'],
+        'REQUEST' => json_encode($_REQUEST),
+    ];
+    \Yii::info(json_encode($info));
+
     try {
         \Yii::$app->end();
     } catch (\yii\base\ExitException $e) {

@@ -9,7 +9,7 @@ use yii\web\Controller;
 class BaseController extends Controller
 {
     public $layout = false;
-    private static $notNeedLogin = [];
+    private static $notNeedLogin = ['login'];
 
     /**
      * @param \yii\base\Action $action
