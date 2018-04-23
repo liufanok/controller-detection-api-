@@ -18,7 +18,7 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
-                '/api/v1/<controller:[\w-]+>/<action:[\w-]+>' => '<controller>/<action>',
+                'POST /api/v1/<controller:[\w-]+>/<action:[\w-]+>' => '<controller>/<action>',
             ],
         ],
         'user' => [

@@ -16,9 +16,12 @@ class SiteController extends BaseController
     {
         $username = $this->safeGetParam("username");
         $pwd = $this->safeGetParam("password");
-
+        if (empty($username) || empty($pwd)) {
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
         if (User::login($username, $pwd)) {
-            responseOK();
+            $user = \Yii::$app->user->identity;
+            responseOK($user->getAuthKey());
         } else {//登录失败
             throw new ApiException(ApiCodeDesc::LOGIN_FAILED);
         }
@@ -37,11 +40,18 @@ class SiteController extends BaseController
      * 用户未登录
      * @throws ApiException
      */
-    public function actionAdminInfo()
+    public function actionUserInfo()
     {
-        $username = \Yii::$app->user->identity->username;
-        if ($username) {
-            responseOK(['name' => $username]);
+        $user = \Yii::$app->user->identity;
+        if ($user) {
+            $data = [
+                'roles' => ['admin'],
+                'token' => $user->getAuthKey(),
+                'introduction' => '',
+                'avatar' => '',
+                'name' => $user->username,
+            ];
+            responseOK($data);
         } else {
             throw new ApiException(ApiCodeDesc::USER_NOT_LOGIN);
         }

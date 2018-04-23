@@ -94,7 +94,16 @@ class User extends ActiveRecord implements IdentityInterface
         if (!Yii::$app->security->validatePassword($pwd, $user->password_hash)) {
             throw new ApiException(ApiCodeDesc::PASSWORD_INVALID);
         }
-        return Yii::$app->user->login($user, 3600 * 8);
+
+        $res = Yii::$app->user->login($user, 3600 * 8);
+        if ($res) {
+            $user->login_times ++;
+            date_default_timezone_set("PRC");
+            $user->last_login_time = date("Y-m-d H:i:s");
+            $user->save();
+        }
+
+        return $res;
     }
 
     /**

@@ -7,6 +7,9 @@ class ApiCodeDesc
     //成功码
     const SUCCESS = 0;//成功
 
+    //1~99系统相关错误
+    const ERR_PARAM_INVALID = 2;//参数错误
+
     //错误码100~200登录相关错误
     const USER_NOT_LOGIN = 100;//用户未登录
     const USER_NOT_EXISTS_OR_FORBIDDEN = 101;//用户不存在或被禁用
@@ -23,6 +26,8 @@ class ApiCodeDesc
     //错误码和错误信息对应关系
     public static $arrApiErrDesc = [
         self::SUCCESS => 'success',
+
+        self::ERR_PARAM_INVALID => '请求参数错误',
 
         self::USER_NOT_LOGIN => '用户未登录',
         self::USER_NOT_EXISTS_OR_FORBIDDEN => '用户不存在或被禁用',
