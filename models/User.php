@@ -23,8 +23,8 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;//已删除
-    const STATUS_NORMAL = 10;//正常
+    const STATUS_DELETED = '0';//已删除
+    const STATUS_NORMAL = '10';//正常
     const RESET_PASSWORD_TOKEN_EXPIRE_TIME = 3600;//重置密码token有效期
 
     /**
