@@ -31,4 +31,32 @@ class HelloController extends Controller
 
         return ExitCode::OK;
     }
+
+    /**
+     * 导入data表的数据
+     * @throws \yii\db\Exception
+     */
+    public function actionImportData()
+    {
+        $db = \Yii::$app->db;
+        $sql1 = "select id,name from loops";
+        $loops = $db->createCommand($sql1)->queryAll();
+        $loops = array_column($loops, 'name', 'id');
+
+        $sql2 = " select * from data_20180309_0";
+        $primaryData = $db->createCommand($sql2)->queryAll();
+
+        foreach ($primaryData as $item) {
+            $data = [];
+            $time = "2018-03-09 " . $item['Time'];
+            foreach ($loops as $id => $name) {
+                $mode = $item[$name.'.MODE'];
+                $mv = $item[$name.'.MV'];
+                $pv = $item[$name.'.PV'];
+                $sp = $item[$name.'.SP'];
+                $data[] = [$id,$time,$mv,$pv,$sp,$mode];
+            }
+            $db->createCommand()->batchInsert("data", ['loop_id', 'time', 'mv', 'pv', 'sv', 'mode'], $data)->execute();
+        }
+    }
 }
