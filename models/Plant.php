@@ -20,4 +20,43 @@ class Plant extends ActiveRecord
     {
         return 'plant';
     }
+
+    /**
+     * 搜索/获取厂区列表
+     * @param $name
+     * @param $page
+     * @param $limit
+     * @return array
+     */
+    public static function search($name, $page, $limit)
+    {
+
+        $query = self::find()
+            ->select(['id', 'name'])
+            ->filterWhere(['like', 'name', $name]);
+        $count = $query->count();
+
+        $offset = ($page - 1) * $limit;
+        $list = $query->offset($offset)
+            ->limit($limit)
+            ->asArray()
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+        return [
+            'count' => $count,
+            'data' => $list,
+        ];
+    }
+
+    /**
+     * 添加厂区
+     * @param $name
+     * @return bool
+     */
+    public static function add($name)
+    {
+        $plant = new plant();
+        $plant->name = $name;
+        return $plant->save();
+    }
 }

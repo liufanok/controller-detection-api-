@@ -10,6 +10,7 @@ class BaseController extends Controller
 {
     public $layout = false;
     private static $notNeedLogin = ['login'];
+    public $username;
 
     /**
      * @param \yii\base\Action $action
@@ -25,6 +26,7 @@ class BaseController extends Controller
             if (!in_array($strActionId, self::$notNeedLogin) && \Yii::$app->user->isGuest) {
                 throw new ApiException(ApiCodeDesc::USER_NOT_LOGIN);
             }
+            $this->username = \Yii::$app->user->identity->username;
             return true;
         }
         return false;
