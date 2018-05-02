@@ -43,10 +43,11 @@ class SiteController extends BaseController
     public function actionUserInfo()
     {
         $user = \Yii::$app->user->identity;
+        $role = $user->roles;
         if ($user) {
             $data = [
-                'roles' => ['admin'],
-                'token' => $user->getAuthKey(),
+                'roles' => [$role],
+                'token' => 'gTW4LlbxSMCwQ4KIBrIOXV3C3i2OiLBZ',
                 'introduction' => '',
                 'avatar' => '',
                 'name' => $user->username,

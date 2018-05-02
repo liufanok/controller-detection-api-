@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\models\ApiCodeDesc;
 use app\models\ApiException;
 use app\models\Plant;
-use app\models\PlantWorkshop;
+use app\models\Workshop;
 
 class PlantController extends BaseController
 {
@@ -64,7 +64,7 @@ class PlantController extends BaseController
         if (!$plant) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
-        if (PlantWorkshop::findOne(['plant_id' => $id])) {
+        if (Workshop::findOne(['plant_id' => $id])) {
             throw new ApiException(ApiCodeDesc::PLANT_HAS_WORKSHOP);
         }
 
@@ -85,7 +85,7 @@ class PlantController extends BaseController
         $id = $this->safeGetParam("id");
         $name = $this->safeGetParam("name");
         $plant = Plant::findOne($id);
-        if (!$plant) {
+        if (!$plant || empty($name)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
         if (Plant::findOne(['name' => $name])) {
