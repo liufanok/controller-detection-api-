@@ -100,4 +100,13 @@ class PlantController extends BaseController
             throw new ApiException(ApiCodeDesc::ERR_DB_UPDATE_DATA_ERROR);
         }
     }
+
+    /**
+     * 获取素有的厂区
+     */
+    public function actionGetAllPlant()
+    {
+        $data = Plant::getAll();
+        responseOK($data);
+    }
 }

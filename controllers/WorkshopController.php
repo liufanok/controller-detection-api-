@@ -106,4 +106,18 @@ class WorkshopController extends BaseController
             throw new ApiException(ApiCodeDesc::ERR_DB_UPDATE_DATA_ERROR);
         }
     }
+
+    /**
+     * 根据厂区获取车间信息
+     * @throws ApiException
+     */
+    public function actionGetWorkshopByPlant()
+    {
+        $plantId = $this->safeGetParam("plant_id");
+        if(!Plant::findOne($plantId)) {
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
+        $data = Workshop::getByPlantId($plantId);
+        responseOK($data);
+    }
 }

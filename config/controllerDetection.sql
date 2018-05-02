@@ -88,7 +88,6 @@ CREATE TABLE `data`(
 CREATE TABLE `result`(
 	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID' ,
 	`loop_id` INT(11) NOT NULL COMMENT '回路的id' ,
-	`loop_name` VARCHAR(64) NOT NULL COMMENT '回路名称' ,
 	`date` DATE NOT NULL COMMENT '测量时间 eg:2018-03-09' ,
 	`suggest` VARCHAR(10) DEFAULT '' COMMENT '分析建议代号（1-8），如有多个用，隔开' ,
 	`performance` VARCHAR(10) NOT NULL COMMENT '评价结果 Excellent/Good/Fair/Poor' ,

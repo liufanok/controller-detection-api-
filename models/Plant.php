@@ -49,6 +49,19 @@ class Plant extends ActiveRecord
     }
 
     /**
+     * 获取所有的厂区
+     * @return array
+     */
+    public static function getAll()
+    {
+        $list = self::find()
+            ->select(['id', 'name'])
+            ->asArray()
+            ->all();
+        return $list ? array_column($list, 'name', 'id') : [];
+    }
+
+    /**
      * 添加厂区
      * @param $name
      * @return bool

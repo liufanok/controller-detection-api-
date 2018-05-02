@@ -64,4 +64,19 @@ class Workshop extends ActiveRecord
         $workshop->plant_id = $plantId;
         return $workshop->save();
     }
+
+    /**
+     * 获取车间
+     * @param $plantId
+     * @return array
+     */
+    public static function getByPlantId($plantId)
+    {
+        $list = self::find()
+            ->select(['id', 'name'])
+            ->where(['plant_id' => $plantId])
+            ->asArray()
+            ->all();
+        return $list ? array_column($list, 'name', 'id') : [];
+    }
 }
