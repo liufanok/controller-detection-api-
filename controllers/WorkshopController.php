@@ -83,13 +83,15 @@ class WorkshopController extends BaseController
     }
 
     /**
-     * 修改车间名称
+     * 修改车间信息
      * @throws ApiException
      */
     public function actionUpdateWorkshop()
     {
         $id = $this->safeGetParam("id");
         $name = $this->safeGetParam("name");
+        $plantId = $this->safeGetParam("plant_id");
+
         $workshop = Workshop::findOne($id);
         if (!$workshop || empty($name)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
@@ -97,8 +99,12 @@ class WorkshopController extends BaseController
         if (Workshop::findOne(['name' => $name])) {
             throw new ApiException(ApiCodeDesc::SAME_WORKSHOP);
         }
+        if (!Plant::findOne($plantId)) {
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
 
         $workshop->name = $name;
+        $workshop->plant_id = $plantId;
         $res = $workshop->save();
         if ($res) {
             responseOK();

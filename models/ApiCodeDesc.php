@@ -27,6 +27,8 @@ class ApiCodeDesc
     const PLANT_HAS_WORKSHOP = 201;//厂区有车间，不支持删除
     const SAME_WORKSHOP = 303;//有一个同名的车间
     const WORKSHOP_HAS_LOOP = 304;//车间有回路
+    const SAME_LOOPS = 305;//有同名的回路
+    const LOOP_HAS_DATA = 306;//回路有数据
 
     const ERR_YII_CODE_ERROR = 9999;//PHP框架报的错误码
 
@@ -52,6 +54,8 @@ class ApiCodeDesc
         self::PLANT_HAS_WORKSHOP=>'该厂区下有车间，暂不支持删除',
         self::SAME_WORKSHOP=>'该车间名已存在',
         self::WORKSHOP_HAS_LOOP=>'该车间有回路，暂不支持删除',
+        self::SAME_LOOPS=>'该回路名已存在',
+        self::LOOP_HAS_DATA=>'该回路有数据，暂不支持删除',
 
         self::ERR_YII_CODE_ERROR => '系统错误',
     ];

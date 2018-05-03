@@ -21,4 +21,18 @@ class Loops extends ActiveRecord
     {
         return 'loops';
     }
+
+    /**
+     * 添加回路
+     * @param $workshopId
+     * @param $name
+     * @return bool
+     */
+    public static function add($workshopId, $name)
+    {
+        $loop = new Loops();
+        $loop->name = $name;
+        $loop->workshop_id = $workshopId;
+        return $loop->save();
+    }
 }
