@@ -9,7 +9,7 @@ use app\models\User;
 class SiteController extends BaseController
 {
     /**
-     * 登录失败
+     * 登录
      * @throws ApiException
      */
     public function actionLogin()
@@ -37,7 +37,7 @@ class SiteController extends BaseController
     }
 
     /**
-     * 用户未登录
+     * 用户信息
      * @throws ApiException
      */
     public function actionUserInfo()
@@ -56,5 +56,38 @@ class SiteController extends BaseController
         } else {
             throw new ApiException(ApiCodeDesc::USER_NOT_LOGIN);
         }
+    }
+
+    /**
+     * 请求重置密码
+     * @throws ApiException
+     * @throws \yii\base\Exception
+     */
+    public function actionResetPasswordRequest()
+    {
+        $username = $this->safeGetParam("username");
+        User::resetPasswordRequest($username);
+        responseOK();
+    }
+
+    /**
+     * 修改密码
+     * @throws \yii\base\Exception
+     */
+    public function actionResetPassword()
+    {
+        $token = $this->safeGetParam("token");
+        $password = $this->safeGetParam("password");
+        $user = User::findByPasswordResetToken($token);
+        if (empty($user)) {
+            throw new ApiException(ApiCodeDesc::ERR_REQUEST_FORBIDDEN);
+        }
+        if (!User::checkPassword($password)) {//密码强度检验
+            throw new ApiException(ApiCodeDesc::PASSWORD_TOO_WEAK);
+        }
+        $user->password_hash = \Yii::$app->security->generatePasswordHash($password);
+        $user->password_reset_token = null;
+        $user->save();
+        responseOK();
     }
 }

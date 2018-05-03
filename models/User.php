@@ -77,6 +77,38 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * 获取用户列表
+     * @param $username
+     * @param $email
+     * @param $phone
+     * @param $status
+     * @param $page
+     * @param $limit
+     * @return array
+     */
+    public static function search($username, $email, $phone, $status, $page, $limit)
+    {
+        $offset = ($page - 1) * $limit;
+        $query = self::find()
+            ->select(['id', 'username', 'roles', 'phone', 'email', 'status', 'login_times', 'create_time'])
+            ->andFilterWhere(['status' => $status])
+            ->andFilterWhere(['like', 'username', $username])
+            ->andFilterWhere(['like', 'phone', $phone])
+            ->andFilterWhere(['like', 'email', $email]);
+        $count = $query -> count();
+
+        $list = $query->offset($offset)
+            ->limit($limit)
+            ->orderBy(["id" => SORT_DESC])
+            ->asArray()
+            ->all();
+        $data = [
+            'data' => $list ? $list : [],
+            'count' => $count,
+        ];
+        return $data;
+    }
+    /**
      * @param $username
      * @param $pwd
      * @return mixed
@@ -122,7 +154,6 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if (self::__generatePasswordResetToken($user)) {
-//            $prefix = YII_ENV == 'prod' ? 'http://mis.talcloud.com/manage' : 'http://mis-test.talcloud.com/manage';
             $prefix = 'http://mis.talcloud.com/manage';
             $url = $prefix . "/static/resetpassword/index.html?token={$user->password_reset_token}";
             $text = "{$user->username}：您好！\n点击下面链接重置您的密码：\n {$url}";

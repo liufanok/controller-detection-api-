@@ -11,6 +11,7 @@ class ApiCodeDesc
     const ERR_PARAM_INVALID = 2;//参数错误
     const ERR_DB_INSERT_DATA_ERROR = 3; //插入数据库失败
     const ERR_DB_UPDATE_DATA_ERROR = 4; //更新数据库失败
+    const ERR_REQUEST_FORBIDDEN = 5;//禁止请求
 
     //错误码100~200登录相关错误
     const USER_NOT_LOGIN = 100;//用户未登录
@@ -22,6 +23,7 @@ class ApiCodeDesc
     const PHONE_EXISTS = 106;//手机号已存在
     const EMAIL_EXISTS = 107;//邮箱已存在
     const USER_NOT_EXISTS = 108;//用户不存在
+    const PASSWORD_TOO_WEAK = 109;//密码强度太弱
 
     const SAME_PLANT = 200;//有一个重名的厂区
     const PLANT_HAS_WORKSHOP = 201;//厂区有车间，不支持删除
@@ -37,8 +39,9 @@ class ApiCodeDesc
         self::SUCCESS => 'success',
 
         self::ERR_PARAM_INVALID => '请求参数错误',
-        self::ERR_DB_INSERT_DATA_ERROR=>'数据库插入失败',
-        self::ERR_DB_UPDATE_DATA_ERROR=>'数据库更新失败',
+        self::ERR_DB_INSERT_DATA_ERROR =>'数据库插入失败',
+        self::ERR_DB_UPDATE_DATA_ERROR =>'数据库更新失败',
+        self::ERR_REQUEST_FORBIDDEN => 'Request Forbidden!',
 
         self::USER_NOT_LOGIN => '用户未登录',
         self::USER_NOT_EXISTS_OR_FORBIDDEN => '用户不存在或被禁用',
@@ -49,6 +52,7 @@ class ApiCodeDesc
         self::PHONE_EXISTS => '手机号已存在',
         self::EMAIL_EXISTS => '邮箱已存在',
         self::USER_NOT_EXISTS => '用户不存在',
+        self::PASSWORD_TOO_WEAK => '密码强度太弱',
 
         self::SAME_PLANT=>'该厂区名已存在',
         self::PLANT_HAS_WORKSHOP=>'该厂区下有车间，暂不支持删除',

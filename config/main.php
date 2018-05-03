@@ -11,7 +11,16 @@ return [
     'components' => [
         'db' => $db,
         'mailer' => [
-            'useFileTransport' => true,
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.163.com',  //每种邮箱的host配置不一样
+                'username' => 'buct_cpa_admin@163.com',
+                'password' => 'buct123456',
+                'port' => '25',
+                'encryption' => 'tls',
+            ],
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
