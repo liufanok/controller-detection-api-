@@ -12,6 +12,28 @@ use app\models\Workshop;
 class LoopsController extends BaseController
 {
     /**
+     * 回路列表
+     * @throws ApiException
+     */
+    public function actionLoopList()
+    {
+        $name = $this->safeGetParam("name");
+        $workshopId = $this->safeGetParam("workshop_id", '');
+        $page = $this->safeGetParam("page", 1);
+        $limit = $this->safeGetParam("limit", 10);
+
+        if (!is_numeric($page) || !is_numeric($limit)) {//参数检验
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
+        if ($workshopId && !Workshop::findOne($workshopId)) {
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
+
+        $data = Loops::search($name, $workshopId, $page, $limit);
+        responseOK($data);
+    }
+
+    /**
      * 添加回路
      * @throws ApiException
      */

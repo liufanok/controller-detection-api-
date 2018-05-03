@@ -35,4 +35,33 @@ class Loops extends ActiveRecord
         $loop->workshop_id = $workshopId;
         return $loop->save();
     }
+
+    /**
+     * 获取/搜索回路的列表
+     * @param $name
+     * @param $workshopId
+     * @param $page
+     * @param $limit
+     * @return array
+     */
+    public static function search($name, $workshopId, $page, $limit)
+    {
+        $query = self::find()
+            ->select(['id', 'name', 'workshop_id', 'w.name'])
+            ->innerJoin('workshop w', 'w.id = loops.workshop_id')
+            ->filterWhere(['like', 'name', $name])
+            ->andFilterWhere(['workshop_id' => $workshopId]);
+        $count = $query->count();
+
+        $offset = ($page - 1) * $limit;
+        $list = $query->offset($offset)
+            ->limit($limit)
+            ->asArray()
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+        return [
+            'count' => $count,
+            'data' => $list,
+        ];
+    }
 }

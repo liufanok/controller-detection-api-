@@ -34,7 +34,8 @@ class Workshop extends ActiveRecord
     {
 
         $query = self::find()
-            ->select(['id', 'name', 'plant_id'])
+            ->select(['id', 'name', 'plant_id', 'p.name'])
+            ->innerJoin('plant p', 'p.id = workshop.plant_id')
             ->filterWhere(['like', 'name', $name])
             ->andFilterWhere(['plant_id' => $plantId]);
         $count = $query->count();
