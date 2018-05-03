@@ -44,6 +44,7 @@ class SiteController extends BaseController
     {
         $user = \Yii::$app->user->identity;
         $role = $user->roles;
+        $last = $user->last_login_time ? date("Y-m-d H:i", strtotime($user->last_login_time)) : '无';
         if ($user) {
             $data = [
                 'roles' => [$role],
@@ -51,6 +52,9 @@ class SiteController extends BaseController
                 'introduction' => '',
                 'avatar' => '',
                 'name' => $user->username,
+                'phone' => $user->phone,
+                'email' => $user->email,
+                'last_login_time' => $last,
             ];
             responseOK($data);
         } else {

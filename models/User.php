@@ -215,12 +215,27 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $username
      * @param $phone
      * @param $email
-     * @return User|null
+     * @return bool
      * @throws ApiException
      * @throws \yii\base\Exception
      */
-    public static function addAdmin($username, $phone, $email)
+    public static function addUser($username, $phone, $email)
     {
+        if (empty($username)) {
+            throw new ApiException(ApiCodeDesc::USERNAME_NOT_NULL);
+        }
+        if (empty($phone)) {
+            throw new ApiException(ApiCodeDesc::PHONE_NOT_NULL);
+        }
+        if (empty($email)) {
+            throw new ApiException(ApiCodeDesc::EMAIL_NOT_NULL);
+        }
+        if (!preg_match("/^1[34578]{1}\d{9}$/",$phone)) {
+            throw new ApiException(ApiCodeDesc::PHONE_ILLEGAL);
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new ApiException(ApiCodeDesc::EMAIL_ILLEGAL);
+        }
         //username，phone,email不能重复
         if (self::findOne(['username' => $username])) {
             throw new ApiException(ApiCodeDesc::USERNAME_EXISTS);
@@ -239,7 +254,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user -> password_hash = '*';
         $user -> auth_key = Yii::$app->security->generateRandomString();
 
-        return $user->save() ? $user : null;
+        return $user->save();
     }
 
     /**
@@ -251,7 +266,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @return bool
      * @throws ApiException
      */
-    public static function updateAdmin($id, $phone, $email, $status = 10)
+    public static function updateUser($id, $phone, $email, $status = 10)
     {
         $user = self::findOne($id);
         if (!$user) {
@@ -268,38 +283,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user -> setAttributes(['phone' => $phone, 'email' => $email, 'status' => $status]);
         $user -> save();
 
-//        if ($status == 0) {//如果禁用删除所有权限
-//            AuthAssignment::deleteAll(['user_id' => $id]);
-//        }
         return true;
-    }
-
-    /**
-     * 用户的列表，用户搜索
-     * @param $params
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public static function search($params)
-    {
-        $offset = ($params['page'] - 1) * $params['limit'];
-        $query = self::find()
-            ->select(['id', 'username', 'phone', 'email', 'status', 'create_time'])
-            ->andFilterWhere(['status' => $params['status']])
-            ->andFilterWhere(['like', 'username', $params['username']])
-            ->andFilterWhere(['like', 'phone', $params['phone']])
-            ->andFilterWhere(['like', 'email', $params['email']]);
-        $count = $query -> count();
-
-        $list = $query->offset($offset)
-            ->limit($params['limit'])
-            ->orderBy(["id" => SORT_DESC])
-            ->asArray()
-            ->all();
-        $data = [
-            'data' => $list ? $list : [],
-            'count' => $count,
-        ];
-        return $data;
     }
 
     /**
