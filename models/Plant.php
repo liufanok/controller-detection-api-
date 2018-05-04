@@ -32,8 +32,10 @@ class Plant extends ActiveRecord
     {
 
         $query = self::find()
-            ->select(['id', 'name'])
-            ->filterWhere(['like', 'name', $name]);
+            ->select(['plant.id', 'plant.name', 'count(w.name) as workshop_count'])
+            ->leftJoin('workshop w', 'w.plant_id = plant.id')
+            ->filterWhere(['like', 'name', $name])
+            ->groupBy('plant.id');
         $count = $query->count();
 
         $offset = ($page - 1) * $limit;

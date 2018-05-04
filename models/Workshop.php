@@ -34,10 +34,12 @@ class Workshop extends ActiveRecord
     {
 
         $query = self::find()
-            ->select(['id', 'name', 'plant_id', 'p.name'])
+            ->select(['workshop.id', 'workshop.name', 'plant_id', 'p.name plant_name', 'count(l.name) loop_count'])
             ->innerJoin('plant p', 'p.id = workshop.plant_id')
-            ->filterWhere(['like', 'name', $name])
-            ->andFilterWhere(['plant_id' => $plantId]);
+            ->innerJoin('loops l', 'l.workshop_id = workshop.id')
+            ->filterWhere(['like', 'workshop.name', $name])
+            ->andFilterWhere(['plant_id' => $plantId])
+            ->groupBy('workshop.id');
         $count = $query->count();
 
         $offset = ($page - 1) * $limit;

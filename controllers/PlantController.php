@@ -102,7 +102,7 @@ class PlantController extends BaseController
     }
 
     /**
-     * 获取素有的厂区
+     * 获取所有的厂区
      */
     public function actionGetAllPlant()
     {
