@@ -64,4 +64,73 @@ class Loops extends ActiveRecord
             'data' => $list,
         ];
     }
+
+    /**
+     * 根据用户获取回路的数据
+     * @param User $user
+     * @param $name
+     * @param $workshopId
+     * @param $page
+     * @param $limit
+     * @return array
+     */
+    public static function getLoopsByUser(User $user, $name, $workshopId, $page, $limit)
+    {
+        $role = $user->roles;
+        $userId = $user->getId();
+        $workshopIds = [];
+        if ($role == User::ROLE_NORMAL) {
+            $userBelong = UserBelong::find()
+                ->select(['belong_id', 'belong_type'])
+                ->where(['user_id' => $userId])
+                ->asArray()
+                ->all();
+            $plantIds = [];
+            foreach ($userBelong as $item) {
+                if ($item['belong_type'] == UserBelong::BELONG_TYPE_WORKSHOP) {
+                    $workshopIds[] = $item['belong_id'];
+                }
+                if ($item['belong_type'] == UserBelong::BELONG_TYPE_PLANT) {
+                    $plantIds[] = $item['belong_id'];
+                }
+            }
+            if (!empty($plantIds)) {
+                $plantWorkshopIds = Workshop::find()
+                    ->select(['id'])
+                    ->where(['plant_id' => $plantIds])
+                    ->asArray()
+                    ->all();
+                $plantWorkshopIds = array_column($plantWorkshopIds, 'id');
+                $workshopIds = array_merge($workshopIds, $plantWorkshopIds);
+            }
+
+            if (empty($workshopIds)) {
+                return [
+                    'count' => 0,
+                    'data' => [],
+                ];
+            }
+        }
+        if (!empty($workshopId)) {
+            $workshopIds = $workshopId;
+        }
+
+        //回路的数据
+        $query = Loops::find()
+            ->select(['loops.id', 'loops.name', 'w.name'])
+            ->innerJoin('workshop w', 'w.id = loops.workshop_id')
+            ->filterWhere(['w.id' => $workshopIds])
+            ->andFilterWhere(['like', 'name', $name]);
+        $count = $query->count();
+        $offset = ($page - 1) * $limit;
+        $list = $query->offset($offset)
+            ->limit($limit)
+            ->asArray()
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+        return [
+            'count' => $count,
+            'data' => $list,
+        ];
+    }
 }

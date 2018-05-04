@@ -110,4 +110,19 @@ class LoopsController extends BaseController
             throw new ApiException(ApiCodeDesc::ERR_DB_UPDATE_DATA_ERROR);
         }
     }
+
+    /**
+     * 获取用户能看到的回路数据
+     */
+    public function actionUserLoops()
+    {
+        $user = $user = \Yii::$app->user->identity;
+        $name = $this->safeGetParam("name");
+        $workshopId = $this->safeGetParam("workshop_id");
+        $page = $this->safeGetParam("page");
+        $limit = $this->safeGetParam("limit");
+
+        $data = Loops::getLoopsByUser($user, $name, $workshopId, $page, $limit);
+        responseOK($data);
+    }
 }
