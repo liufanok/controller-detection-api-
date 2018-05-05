@@ -7,6 +7,7 @@ use app\models\ApiException;
 use app\models\Data;
 use app\models\Loops;
 use app\models\Result;
+use app\models\User;
 use app\models\Workshop;
 
 class LoopsController extends BaseController
@@ -17,6 +18,10 @@ class LoopsController extends BaseController
      */
     public function actionLoopList()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $name = $this->safeGetParam("name");
         $workshopId = $this->safeGetParam("workshop_id", '');
         $page = $this->safeGetParam("page", 1);
@@ -39,6 +44,10 @@ class LoopsController extends BaseController
      */
     public function actionAddLoop()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $workshopId = $this->safeGetParam("workshop_id");
         $name = $this->safeGetParam("name");
         if (!Workshop::findOne($workshopId)) {
@@ -64,6 +73,10 @@ class LoopsController extends BaseController
      */
     public function actionsDeleteLoop()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $id = $this->safeGetParam("id");
         $loop = Loops::findOne($id);
         if (!$loop) {
@@ -86,6 +99,10 @@ class LoopsController extends BaseController
      */
     public function actionUpdateLoop()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $id = $this->safeGetParam("id");
         $workshopId = $this->safeGetParam("workshop_id");
         $name = $this->safeGetParam("name");
@@ -116,7 +133,7 @@ class LoopsController extends BaseController
      */
     public function actionUserLoops()
     {
-        $user = $user = \Yii::$app->user->identity;
+        $user = \Yii::$app->user->identity;
         $name = $this->safeGetParam("name");
         $workshopId = $this->safeGetParam("workshop_id");
         $page = $this->safeGetParam("page");

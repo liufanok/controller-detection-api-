@@ -14,6 +14,10 @@ class UserController extends BaseController
      */
     public function actionUserList()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $username = $this->safeGetParam("username", null);
         $phone = $this->safeGetParam("phone", null);
         $email = $this->safeGetParam("email", null);
@@ -37,6 +41,10 @@ class UserController extends BaseController
      */
     public function actionAddUser()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $username = $this->safeGetParam("username");
         $phone = $this->safeGetParam("phone");
         $email = $this->safeGetParam("email");
@@ -50,6 +58,10 @@ class UserController extends BaseController
      */
     public function actionUpdateUser()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $id = $this->safeGetParam("id");
         $phone = $this->safeGetParam("phone");
         $email = $this->safeGetParam("email");
@@ -71,6 +83,10 @@ class UserController extends BaseController
      */
     public function actionBatchImportUser()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $filePath = $_FILES['file']['tmp_name'];
         $phpExcelReader = new \PHPExcel_Reader_Excel2007();
         if (!$phpExcelReader->canRead($filePath)) {

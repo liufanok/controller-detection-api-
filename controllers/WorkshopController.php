@@ -6,6 +6,7 @@ use app\models\ApiCodeDesc;
 use app\models\ApiException;
 use app\models\Loops;
 use app\models\Plant;
+use app\models\User;
 use app\models\Workshop;
 
 class WorkshopController extends BaseController
@@ -16,6 +17,10 @@ class WorkshopController extends BaseController
      */
     public function actionWorkshopList()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $name = $this->safeGetParam("name");
         $plantId = $this->safeGetParam("plant_id", '');
         $page = $this->safeGetParam("page", 1);
@@ -38,6 +43,10 @@ class WorkshopController extends BaseController
      */
     public function actionAddWorkshop()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $name = $this->safeGetParam("name");
         $plantId = $this->safeGetParam("plant_id");
 
@@ -65,6 +74,10 @@ class WorkshopController extends BaseController
      */
     public function actionDeleteWorkshop()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $id = $this->safeGetParam("id");
         $workshop = Workshop::findOne($id);
         if (!$workshop) {
@@ -88,6 +101,10 @@ class WorkshopController extends BaseController
      */
     public function actionUpdateWorkshop()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $id = $this->safeGetParam("id");
         $name = $this->safeGetParam("name");
         $plantId = $this->safeGetParam("plant_id");

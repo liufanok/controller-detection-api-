@@ -144,4 +144,52 @@ class Loops extends ActiveRecord
             'data' => $list,
         ];
     }
+
+    /**
+     * 判断一个用户是否有权限查看某个回路
+     * @param User $user
+     * @param $loopId
+     * @return bool
+     */
+    public static function userHasAccess(User $user, $loopId)
+    {
+        if ($user->roles == User::ROLE_ADMIN) {
+            return true;
+        } else {
+            $userId = $user->id;
+            $userBelong = UserBelong::find()
+                ->select(['belong_id', 'belong_type'])
+                ->where(['user_id' => $userId])
+                ->asArray()
+                ->all();
+            $plantIds = [];
+            $workshopIds = [];
+            foreach ($userBelong as $item) {
+                if ($item['belong_type'] == UserBelong::BELONG_TYPE_WORKSHOP) {
+                    $workshopIds[] = $item['belong_id'];
+                }
+                if ($item['belong_type'] == UserBelong::BELONG_TYPE_PLANT) {
+                    $plantIds[] = $item['belong_id'];
+                }
+            }
+            if (!empty($plantIds)) {
+                $plantWorkshopIds = Workshop::find()
+                    ->select(['id'])
+                    ->where(['plant_id' => $plantIds])
+                    ->asArray()
+                    ->all();
+                $plantWorkshopIds = array_column($plantWorkshopIds, 'id');
+                $workshopIds = array_merge($workshopIds, $plantWorkshopIds);
+            }
+
+            if (empty($workshopIds)) {
+                return false;
+            }
+            $loops = Loops::find()
+                ->where(['and', 'loop_id' => $loopId, 'workshop_id' => $workshopIds])
+                ->asArray()
+                ->all();
+            return !empty($loops);
+        }
+    }
 }

@@ -15,6 +15,7 @@ class ApiCodeDesc
     const ERR_LOAD_EXCEL_FAIL = 6;//excel文件上传失败
     const ERR_EXCEL_IS_NULL = 7;//excel数据为空
     const ERR_EXCEL_GET_MAX = 8;//excel文件达到最大的数量
+    const ERR_HAS_NO_ACCESS = 9;//无权限
 
     //错误码100~200登录相关错误
     const USER_NOT_LOGIN = 100;//用户未登录
@@ -53,6 +54,7 @@ class ApiCodeDesc
         self::ERR_LOAD_EXCEL_FAIL => 'excel文件上传失败',
         self::ERR_EXCEL_IS_NULL => 'excel文件数据为空',
         self::ERR_EXCEL_GET_MAX => '最大不超过1000条数据',
+        self::ERR_HAS_NO_ACCESS => '您暂无权限',
 
         self::USER_NOT_LOGIN => '用户未登录',
         self::USER_NOT_EXISTS_OR_FORBIDDEN => '用户不存在或被禁用',

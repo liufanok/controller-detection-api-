@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\ApiCodeDesc;
 use app\models\ApiException;
 use app\models\Plant;
+use app\models\User;
 use app\models\Workshop;
 
 class PlantController extends BaseController
@@ -15,6 +16,10 @@ class PlantController extends BaseController
      */
     public function actionPlantList()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $name = $this->safeGetParam("name");
         $page = $this->safeGetParam("page", 1);
         $limit = $this->safeGetParam("limit", 10);
@@ -33,6 +38,10 @@ class PlantController extends BaseController
      */
     public function actionAddPlant()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $name = $this->safeGetParam("name");
 
         if (empty($name)) {
@@ -59,6 +68,10 @@ class PlantController extends BaseController
      */
     public function actionDeletePlant()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $id = $this->safeGetParam("id");
         $plant = Plant::findOne($id);
         if (!$plant) {
@@ -82,6 +95,10 @@ class PlantController extends BaseController
      */
     public function actionUpdatePlant()
     {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+
         $id = $this->safeGetParam("id");
         $name = $this->safeGetParam("name");
         $plant = Plant::findOne($id);

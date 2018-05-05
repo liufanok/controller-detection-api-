@@ -28,6 +28,7 @@ class BaseController extends Controller
                 throw new ApiException(ApiCodeDesc::USER_NOT_LOGIN);
             }
             $this->username = \Yii::$app->user->identity->username;
+            $this->role = \Yii::$app->user->identity->roles;
             return true;
         }
         return false;

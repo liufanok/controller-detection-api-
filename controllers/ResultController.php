@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\ApiCodeDesc;
 use app\models\ApiException;
+use app\models\Loops;
 use app\models\Result;
 
 class ResultController extends BaseController
@@ -16,6 +17,10 @@ class ResultController extends BaseController
     {
         $loopId = $this->safeGetParam("loop_id");
         $date = $this->safeGetParam("date");
+
+        if (!Loops::userHasAccess(\Yii::$app->user->identity, $loopId)) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
         if (empty($loopId) || empty($date)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
@@ -33,6 +38,9 @@ class ResultController extends BaseController
         $result = Result::findOne($resultId);
         if (!$result) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
+        if (!Loops::userHasAccess(\Yii::$app->user->identity, $result->loop_id)) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
         }
 
         $data = Result::reportDate($result);
