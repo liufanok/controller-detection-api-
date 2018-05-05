@@ -32,7 +32,6 @@ class Workshop extends ActiveRecord
      */
     public static function search($name, $plantId, $page, $limit)
     {
-
         $query = self::find()
             ->select(['workshop.id', 'workshop.name', 'plant_id', 'p.name plant_name', 'count(l.name) loop_count'])
             ->innerJoin('plant p', 'p.id = workshop.plant_id')

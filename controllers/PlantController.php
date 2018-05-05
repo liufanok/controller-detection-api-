@@ -88,7 +88,7 @@ class PlantController extends BaseController
         if (!$plant || empty($name)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
-        if (Plant::findOne(['name' => $name])) {
+        if ($name != $plant->name && Plant::findOne(['name' => $name])) {
             throw new ApiException(ApiCodeDesc::SAME_PLANT);
         }
 

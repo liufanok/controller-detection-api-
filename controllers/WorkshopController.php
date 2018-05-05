@@ -96,7 +96,7 @@ class WorkshopController extends BaseController
         if (!$workshop || empty($name)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
-        if (Workshop::findOne(['name' => $name])) {
+        if ($name != $workshop->name && Workshop::findOne(['name' => $name])) {
             throw new ApiException(ApiCodeDesc::SAME_WORKSHOP);
         }
         if (!Plant::findOne($plantId)) {

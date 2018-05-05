@@ -97,7 +97,7 @@ class LoopsController extends BaseController
         if (!Workshop::findOne($workshopId)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
-        if (Loops::findOne(['name' => $name])) {
+        if ($name != $loop->name && Loops::findOne(['name' => $name])) {
             throw new ApiException(ApiCodeDesc::SAME_LOOPS);
         }
 
