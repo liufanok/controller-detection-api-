@@ -30,11 +30,12 @@ class ResultController extends BaseController
     public function actionReport()
     {
         $resultId = $this->safeGetParam("result_id");
-        if (!Result::findOne($resultId)) {
+        $result = Result::findOne($resultId);
+        if (!$result) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
 
-        $data = Result::reportDate($resultId);
+        $data = Result::reportDate($result);
         responseOK($data);
     }
 }

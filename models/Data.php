@@ -23,4 +23,22 @@ class Data extends ActiveRecord
     {
         return 'data';
     }
+
+    /**
+     * 获取测量的数据
+     * @param $loopId
+     * @param $start
+     * @param $end
+     * @return array|ActiveRecord[]
+     */
+    public static function getDataByLoopIdAndTimeScope($loopId, $start, $end)
+    {
+        $list = self::find()
+            ->select(['loop_id', 'DATE_FORMAT(time, %h:%i)', 'mv', 'pv', 'sv', 'mode'])
+            ->where(['loop_id' => $loopId])
+            ->andWhere(['between', 'time', $start, $end])
+            ->asArray()
+            ->all();
+        return $list;
+    }
 }

@@ -37,6 +37,17 @@ class Loops extends ActiveRecord
     }
 
     /**
+     * 获取回路名
+     * @param $loopId
+     * @return string
+     */
+    public static function getNameById($loopId)
+    {
+        $loop = self::findOne($loopId);
+        return empty($loop) ? '' : $loop->name;
+    }
+
+    /**
      * 获取/搜索回路的列表
      * @param $name
      * @param $workshopId
@@ -47,9 +58,9 @@ class Loops extends ActiveRecord
     public static function search($name, $workshopId, $page, $limit)
     {
         $query = self::find()
-            ->select(['id', 'name', 'workshop_id', 'w.name'])
+            ->select(['id', 'loops.name loop_name', 'workshop_id', 'w.name'])
             ->innerJoin('workshop w', 'w.id = loops.workshop_id')
-            ->filterWhere(['like', 'name', $name])
+            ->filterWhere(['like', 'loops.name', $name])
             ->andFilterWhere(['workshop_id' => $workshopId]);
         $count = $query->count();
 

@@ -34,7 +34,7 @@ class Plant extends ActiveRecord
         $query = self::find()
             ->select(['plant.id', 'plant.name', 'count(w.name) as workshop_count'])
             ->leftJoin('workshop w', 'w.plant_id = plant.id')
-            ->filterWhere(['like', 'name', $name])
+            ->filterWhere(['like', 'plant.name', $name])
             ->groupBy('plant.id');
         $count = $query->count();
 

@@ -23,6 +23,9 @@ use yii\db\ActiveRecord;
  * @property float $dev_pv
  * @property float $dev_mv
  * @property float $dev_sv
+ * @property float $e_pv
+ * @property float $e_sv
+ * @property float $e_mv
  * @property float $switch
  * @property string $start_time
  * @property string $end_time
@@ -57,9 +60,41 @@ class Result extends ActiveRecord
         return array_column($list, 'time_scope', 'id');
     }
 
-    public static function reportDate($resultId)
+    /**
+     * 报告的数据
+     * @param Result $result
+     * @return array
+     */
+    public static function reportDate(Result $result)
     {
-
+        $loopId = $result->loop_id;
+        $loopNAme = Loops::getNameById($loopId);
+        $start = "{$result->date} {$result->start_time}";
+        $end = "{$result->date} {$result->end_time}";
+        $data = Data::getDataByLoopIdAndTimeScope($loopId, $start, $end);
+        $returnData = [
+            'loop_name' => $loopNAme,
+            'result' => $result->performance,
+            'osci' => $result->osci,
+            'rpi' => $result->rpi,
+            'dev' => [
+                $result->dev_sv,
+                $result->dev_pv,
+                $result->dev_mv,
+            ],
+            'e' => [
+                $result->e_sv,
+                $result->e_pv,
+                $result->e_mv
+            ],
+            'sf' => $result->sf,
+            'esf' => $result->e_sf,
+            'set_time' => $result->set_time,
+            'switch' => $result->switch,
+            'chart_data' => $data,
+            'suggest' => self::getSuggest($result->suggest)
+        ];
+        return $returnData;
     }
     /**
      * 获取意见

@@ -11,6 +11,7 @@ class BaseController extends Controller
     public $layout = false;
     private static $notNeedLogin = ['login'];
     public $username;
+    public $role;
 
     /**
      * @param \yii\base\Action $action
