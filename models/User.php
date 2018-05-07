@@ -217,11 +217,12 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $username
      * @param $phone
      * @param $email
+     * @param $role
      * @return bool
      * @throws ApiException
      * @throws \yii\base\Exception
      */
-    public static function addUser($username, $phone, $email)
+    public static function addUser($username, $phone, $email, $role)
     {
         if (empty($username)) {
             throw new ApiException(ApiCodeDesc::USERNAME_NOT_NULL);
@@ -253,6 +254,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user -> username = $username;
         $user -> phone = $phone;
         $user -> email = $email;
+        $user->roles = $role;
         $user -> password_hash = '*';
         $user -> auth_key = Yii::$app->security->generateRandomString();
 

@@ -48,7 +48,8 @@ class UserController extends BaseController
         $username = $this->safeGetParam("username");
         $phone = $this->safeGetParam("phone");
         $email = $this->safeGetParam("email");
-        User::addUser($username, $phone, $email);
+        $role = $this->safeGetParam("role");
+        User::addUser($username, $phone, $email, $role);
         responseOK();
     }
 

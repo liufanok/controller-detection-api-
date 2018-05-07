@@ -60,7 +60,7 @@ class Plant extends ActiveRecord
             ->select(['id', 'name'])
             ->asArray()
             ->all();
-        return $list ? array_column($list, 'name', 'id') : [];
+        return $list ? $list : [];
     }
 
     /**

@@ -58,7 +58,7 @@ class Loops extends ActiveRecord
     public static function search($name, $workshopId, $page, $limit)
     {
         $query = self::find()
-            ->select(['id', 'loops.name loop_name', 'workshop_id', 'w.name'])
+            ->select(['loops.id', 'loops.name loop_name', 'workshop_id', 'w.name'])
             ->innerJoin('workshop w', 'w.id = loops.workshop_id')
             ->filterWhere(['like', 'loops.name', $name])
             ->andFilterWhere(['workshop_id' => $workshopId]);
@@ -68,7 +68,7 @@ class Loops extends ActiveRecord
         $list = $query->offset($offset)
             ->limit($limit)
             ->asArray()
-            ->orderBy(['id' => SORT_DESC])
+            ->orderBy(['loops.id' => SORT_DESC])
             ->all();
         return [
             'count' => $count,

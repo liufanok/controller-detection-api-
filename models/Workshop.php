@@ -35,7 +35,7 @@ class Workshop extends ActiveRecord
         $query = self::find()
             ->select(['workshop.id', 'workshop.name', 'plant_id', 'p.name plant_name', 'count(l.name) loop_count'])
             ->innerJoin('plant p', 'p.id = workshop.plant_id')
-            ->innerJoin('loops l', 'l.workshop_id = workshop.id')
+            ->leftJoin('loops l', 'l.workshop_id = workshop.id')
             ->filterWhere(['like', 'workshop.name', $name])
             ->andFilterWhere(['plant_id' => $plantId])
             ->groupBy('workshop.id');
@@ -79,6 +79,6 @@ class Workshop extends ActiveRecord
             ->where(['plant_id' => $plantId])
             ->asArray()
             ->all();
-        return $list ? array_column($list, 'name', 'id') : [];
+        return $list ? $list : [];
     }
 }
