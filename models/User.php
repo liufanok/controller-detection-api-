@@ -98,7 +98,7 @@ class User extends ActiveRecord implements IdentityInterface
             ->andFilterWhere(['like', 'username', $username])
             ->andFilterWhere(['like', 'phone', $phone])
             ->andFilterWhere(['like', 'email', $email])
-            ->andFilterWhere(['role' => $role]);
+            ->andFilterWhere(['roles' => $role]);
         $count = $query -> count();
 
         $list = $query->offset($offset)
@@ -106,6 +106,18 @@ class User extends ActiveRecord implements IdentityInterface
             ->orderBy(["id" => SORT_DESC])
             ->asArray()
             ->all();
+
+        $normal = [];
+        foreach ($list as &$item) {
+            if ($item['roles'] == self::ROLE_NORMAL) {
+                $normal[] = $item['id'];
+            }
+            $item['create_time'] = date("Y-m-d", strtotime($item['create_time']));
+        }
+        $userBelongMap = UserBelong::getChineseByUserId($normal);
+        foreach ($list as &$item) {
+            $item['belong'] = $item['roles'] == self::ROLE_NORMAL ? $userBelongMap[$item['id']] : '/' ;
+        }
         $data = [
             'data' => $list ? $list : [],
             'count' => $count,

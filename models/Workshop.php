@@ -81,4 +81,19 @@ class Workshop extends ActiveRecord
             ->all();
         return $list ? $list : [];
     }
+
+    /**
+     * 批量获取车间名
+     * @param $id
+     * @return array
+     */
+    public static function getNameById($id)
+    {
+        $infos = self::find()
+            ->select(['id', 'name'])
+            ->where(['id' => $id])
+            ->asArray()
+            ->all();
+        return $infos ? array_column($infos, 'name', 'id') : [];
+    }
 }

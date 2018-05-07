@@ -128,7 +128,7 @@ class Loops extends ActiveRecord
 
         //回路的数据
         $query = Loops::find()
-            ->select(['loops.id', 'loops.name', 'w.name'])
+            ->select(['loops.id', 'loops.name loop_name', 'w.name'])
             ->innerJoin('workshop w', 'w.id = loops.workshop_id')
             ->filterWhere(['w.id' => $workshopIds])
             ->andFilterWhere(['like', 'name', $name]);

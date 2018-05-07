@@ -136,8 +136,8 @@ class LoopsController extends BaseController
         $user = \Yii::$app->user->identity;
         $name = $this->safeGetParam("name");
         $workshopId = $this->safeGetParam("workshop_id");
-        $page = $this->safeGetParam("page");
-        $limit = $this->safeGetParam("limit");
+        $page = $this->safeGetParam("page", 1);
+        $limit = $this->safeGetParam("limit", 10);
 
         $data = Loops::getLoopsByUser($user, $name, $workshopId, $page, $limit);
         responseOK($data);

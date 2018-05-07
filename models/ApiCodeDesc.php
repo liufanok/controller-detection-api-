@@ -69,6 +69,8 @@ class ApiCodeDesc
         self::USERNAME_NOT_NULL => '用户名不能为空',
         self::PHONE_NOT_NULL => '手机号不能为空',
         self::EMAIL_NOT_NULL => '邮箱不能为空',
+        self::PHONE_ILLEGAL => '手机号非法',
+        self::EMAIL_ILLEGAL => '邮箱非法',
 
         self::SAME_PLANT=>'该厂区名已存在',
         self::PLANT_HAS_WORKSHOP=>'该厂区下有车间，暂不支持删除',

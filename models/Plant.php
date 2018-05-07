@@ -74,4 +74,19 @@ class Plant extends ActiveRecord
         $plant->name = $name;
         return $plant->save();
     }
+
+    /**
+     * 批量获取厂区名
+     * @param $id
+     * @return array
+     */
+    public static function getNameById($id)
+    {
+        $infos = self::find()
+            ->select(['id', 'name'])
+            ->where(['id' => $id])
+            ->asArray()
+            ->all();
+        return $infos ? array_column($infos, 'name', 'id') : [];
+    }
 }
