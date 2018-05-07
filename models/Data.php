@@ -34,7 +34,7 @@ class Data extends ActiveRecord
     public static function getDataByLoopIdAndTimeScope($loopId, $start, $end)
     {
         $list = self::find()
-            ->select(['loop_id', 'DATE_FORMAT(time, %h:%i)', 'mv', 'pv', 'sv', 'mode'])
+            ->select(['loop_id', "DATE_FORMAT(time, '%h:%i') as time", 'mv', 'pv', 'sv', 'mode'])
             ->where(['loop_id' => $loopId])
             ->andWhere(['between', 'time', $start, $end])
             ->asArray()

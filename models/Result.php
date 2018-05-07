@@ -52,9 +52,10 @@ class Result extends ActiveRecord
     public static function getTimeListByLoopIdAndDate($loopId, $date)
     {
         $list = self::find()
-            ->select(['id', 'CONCAT(start_time, '-', end_time) time_scope'])
+            ->select(["CONCAT(start_time, '-', end_time) time_scope"])
             ->where(['loop_id' => $loopId])
             ->andWhere(['date' => $date])
+            ->groupBy('time_scope')
             ->asArray()
             ->all();
         return array_column($list, 'time_scope', 'id');
@@ -72,6 +73,14 @@ class Result extends ActiveRecord
         $start = "{$result->date} {$result->start_time}";
         $end = "{$result->date} {$result->end_time}";
         $data = Data::getDataByLoopIdAndTimeScope($loopId, $start, $end);
+        $chartData = [
+            'y_data' => [
+                'sv' => array_column($data, 'sv'),
+                'mv' => array_column($data, 'mv'),
+                'pv' => array_column($data, 'pv')
+            ],
+            'x_data' => array_column($data, 'time')
+        ];
         $returnData = [
             'loop_name' => $loopNAme,
             'result' => $result->performance,
@@ -91,7 +100,7 @@ class Result extends ActiveRecord
             'esf' => $result->e_sf,
             'set_time' => $result->set_time,
             'switch' => $result->switch,
-            'chart_data' => $data,
+            'chart_data' => $chartData,
             'suggest' => self::getSuggest($result->suggest)
         ];
         return $returnData;
