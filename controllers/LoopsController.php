@@ -71,7 +71,7 @@ class LoopsController extends BaseController
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function actionsDeleteLoop()
+    public function actionDeleteLoop()
     {
         if ($this->role != User::ROLE_ADMIN) {
             throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);

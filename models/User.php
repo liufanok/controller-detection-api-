@@ -86,9 +86,10 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $status
      * @param $page
      * @param $limit
+     * @param $role
      * @return array
      */
-    public static function search($username, $email, $phone, $status, $page, $limit)
+    public static function search($username, $email, $phone, $status, $page, $limit, $role)
     {
         $offset = ($page - 1) * $limit;
         $query = self::find()
@@ -96,7 +97,8 @@ class User extends ActiveRecord implements IdentityInterface
             ->andFilterWhere(['status' => $status])
             ->andFilterWhere(['like', 'username', $username])
             ->andFilterWhere(['like', 'phone', $phone])
-            ->andFilterWhere(['like', 'email', $email]);
+            ->andFilterWhere(['like', 'email', $email])
+            ->andFilterWhere(['role' => $role]);
         $count = $query -> count();
 
         $list = $query->offset($offset)
@@ -254,7 +256,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user -> username = $username;
         $user -> phone = $phone;
         $user -> email = $email;
-        $user->roles = $role;
+        $user -> roles = $role;
         $user -> password_hash = '*';
         $user -> auth_key = Yii::$app->security->generateRandomString();
 
@@ -267,10 +269,11 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $phone
      * @param $email
      * @param int $status
+     * @param $role
      * @return bool
      * @throws ApiException
      */
-    public static function updateUser($id, $phone, $email, $status = 10)
+    public static function updateUser($id, $phone, $email, $status = 10, $role)
     {
         $user = self::findOne($id);
         if (!$user) {
@@ -284,7 +287,7 @@ class User extends ActiveRecord implements IdentityInterface
             throw new ApiException(ApiCodeDesc::EMAIL_EXISTS);
         }
 
-        $user -> setAttributes(['phone' => $phone, 'email' => $email, 'status' => $status]);
+        $user -> setAttributes(['phone' => $phone, 'email' => $email, 'status' => $status, 'roles' => $role]);
         $user -> save();
 
         return true;

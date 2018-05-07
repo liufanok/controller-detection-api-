@@ -24,13 +24,14 @@ class UserController extends BaseController
         $status = $this->safeGetParam("status", null);
         $page = $this->safeGetParam("page", 1);
         $limit = $this->safeGetParam("limit", 10);
+        $role = $this->safeGetParam("role");
 
         //参数检验
         if (!is_numeric($page) || !is_numeric($limit)) {//参数检验
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
 
-        $list = User::search($username, $email, $phone, $status, $page, $limit);
+        $list = User::search($username, $email, $phone, $status, $page, $limit, $role);
         responseOK($list);
     }
 
@@ -67,12 +68,13 @@ class UserController extends BaseController
         $phone = $this->safeGetParam("phone");
         $email = $this->safeGetParam("email");
         $status = $this->safeGetParam("status");
+        $role = $this->safeGetParam("role");
 
         if (!in_array($status, [User::STATUS_NORMAL, User::STATUS_DELETED])) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
 
-        User::updateUser($id, $phone, $email, $status);
+        User::updateUser($id, $phone, $email, $status, $role);
         responseOK();
     }
 
@@ -117,7 +119,7 @@ class UserController extends BaseController
             $phone = strval($currentSheet->getCell('B' . $currentRow)->getValue());
             $email = strval($currentSheet->getCell('C' . $currentRow)->getValue());
             try {
-                $res = User::addUser($username, $phone, $email);
+                $res = User::addUser($username, $phone, $email, 'normal');
                 if (!$res) {
                     throw new ApiException(ApiCodeDesc::ERR_DB_INSERT_DATA_ERROR);
                 }
