@@ -37,7 +37,6 @@ class ResultController extends BaseController
         $date = $this->safeGetParam("date");
         $scope = $this->safeGetParam("scope");
         $loopId = $this->safeGetParam("loop_id");
-
         $timeArr = explode('-', $scope);
         if (empty($timeArr)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
@@ -45,7 +44,7 @@ class ResultController extends BaseController
 
         $result = Result::findOne(['loop_id' => $loopId, 'date' => $date, 'start_time' => $timeArr[0], 'end_time' => $timeArr[1]]);
         if (empty($result)) {
-            responseOK([]);
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
         if (!Loops::userHasAccess(\Yii::$app->user->identity, $result->loop_id)) {
             throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);

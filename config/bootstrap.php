@@ -8,7 +8,6 @@
  */
 function returnData($code, $message = 'success', $data = null)
 {
-
     $returnData = [
         'code' => $code,
         'message' => $message,

@@ -40,6 +40,7 @@ class ApiCodeDesc
     const WORKSHOP_HAS_LOOP = 304;//车间有回路
     const SAME_LOOPS = 305;//有同名的回路
     const LOOP_HAS_DATA = 306;//回路有数据
+    const NO_DATA = 307;//
 
     const ERR_YII_CODE_ERROR = 9999;//PHP框架报的错误码
 

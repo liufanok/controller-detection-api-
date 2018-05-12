@@ -9,7 +9,7 @@ use yii\web\Controller;
 class BaseController extends Controller
 {
     public $layout = false;
-    private static $notNeedLogin = ['login'];
+    private static $notNeedLogin = ['login', 'reset-password-request', 'reset-password'];
     public $username;
     public $role;
 

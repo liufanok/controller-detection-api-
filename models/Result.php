@@ -90,11 +90,13 @@ class Result extends ActiveRecord
                 $result->dev_sv,
                 $result->dev_pv,
                 $result->dev_mv,
+                $result->dev_err,
             ],
             'e' => [
                 $result->e_sv,
                 $result->e_pv,
-                $result->e_mv
+                $result->e_mv,
+                $result->e_err,
             ],
             'sf' => $result->sf,
             'esf' => $result->e_sf,
@@ -121,7 +123,7 @@ class Result extends ActiveRecord
             case 6 : $suggest = '有效投用率较低，振荡指数在高级警告范围内。可能是粘滞回路吗，检查阀门；阀门可能已经饱和，控制无法作用，检查阀门。';break;
             case 7 : $suggest = '控制器输出卡在上限，控制器无效。';break;
             case 8 : $suggest = '控制器输出卡在下限，控制器无效';break;
-            default : $suggest = '';
+            default : $suggest = '回路性能一切指标均合格。';
         }
         return $suggest;
     }

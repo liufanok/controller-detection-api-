@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\ApiCodeDesc;
 use app\models\ApiException;
 use app\models\Data;
+use app\models\ExcelHelper;
 use app\models\Loops;
 use app\models\Result;
 use app\models\User;
@@ -141,5 +142,19 @@ class LoopsController extends BaseController
 
         $data = Loops::getLoopsByUser($user, $name, $workshopId, $page, $limit);
         responseOK($data);
+    }
+
+    /**
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function actionExport()
+    {
+        $data = [
+            [1,2]
+        ];
+        ExcelHelper::exportExcel( 'a', '学生列表',
+            ['姓名', '学号'], $data);
+        responseOK();
     }
 }
