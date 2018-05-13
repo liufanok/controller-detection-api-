@@ -12,12 +12,12 @@ return [
         'db' => $db,
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => false,
+            'useFileTransport' => false,//这句一定有，false发送邮件，true只是生成邮件在runtime文件夹下，不发邮件
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.163.com',  //每种邮箱的host配置不一样
                 'username' => 'buct_cpa_admin@163.com',
-                'password' => 'buct123456',
+                'password' => 'buct1234',
                 'port' => '25',
                 'encryption' => 'tls',
             ],

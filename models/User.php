@@ -170,15 +170,15 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if (self::__generatePasswordResetToken($user)) {
-            $prefix = 'http://mis.talcloud.com/manage';
+            $prefix = 'http://liufan.me';
             $url = $prefix . "/static/resetpassword/index.html?token={$user->password_reset_token}";
             $text = "{$user->username}：您好！\n点击下面链接重置您的密码：\n {$url}";
             $res = Yii::$app
                 ->mailer
                 ->compose()
-                ->setFrom("shupan001@163.com")
+                ->setFrom("buct_cpa_admin@163.com")
                 ->setTo($user->email)
-                ->setSubject("【雪地阅读】这是一封密码重置链接")
+                ->setSubject("【CPA system】这是一封密码重置链接")
                 ->setTextBody($text)
                 ->send();
             return $res;

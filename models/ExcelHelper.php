@@ -17,7 +17,9 @@ class ExcelHelper {
      * @throws \PHPExcel_Exception
      * @throws \PHPExcel_Reader_Exception
      */
-    public static function exportExcel($filename, $sheetName, $title, $data) {
+    public static function exportExcel($filename, $sheetName, $title, $data)
+    {
+        require_once('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
         //设置缓存方式
         $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
         \PHPExcel_Settings::setCacheStorageMethod ( $cacheMethod );
