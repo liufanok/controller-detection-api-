@@ -116,7 +116,14 @@ class User extends ActiveRecord implements IdentityInterface
         }
         $userBelongMap = UserBelong::getChineseByUserId($normal);
         foreach ($list as &$item) {
-            $item['belong'] = $item['roles'] == self::ROLE_NORMAL ? $userBelongMap[$item['id']] : '/' ;
+            if ($item['roles'] == self::ROLE_NORMAL) {
+                $all = array_column($userBelongMap[$item['id']], 'full_name');
+                $item['belong'] = implode('，', $all);
+                $item['belong_arr'] = $userBelongMap[$item['id']];
+            } else {
+                $item['belong'] = '/';
+                $item['belong_arr'] = [];
+            }
         }
         $data = [
             'data' => $list ? $list : [],

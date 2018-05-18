@@ -6,6 +6,7 @@ use app\models\ApiCodeDesc;
 use app\models\ApiException;
 use app\models\Plant;
 use app\models\User;
+use app\models\UserBelong;
 use app\models\Workshop;
 
 class PlantController extends BaseController
@@ -83,6 +84,7 @@ class PlantController extends BaseController
 
         $res = $plant->delete();
         if ($res) {
+            UserBelong::deleteAll(['belong_type' => UserBelong::BELONG_TYPE_PLANT, 'belong_id' => $id]);
             responseOK();
         } else {
             throw new ApiException(ApiCodeDesc::ERR_DB_UPDATE_DATA_ERROR);

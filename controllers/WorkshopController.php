@@ -92,6 +92,7 @@ class WorkshopController extends BaseController
 
         $res = $workshop->delete();
         if ($res) {
+            UserBelong::deleteAll(['belong_type' => UserBelong::BELONG_TYPE_WORKSHOP, 'belong_id' => $id]);
             responseOK();
         } else {
             throw new ApiException(ApiCodeDesc::ERR_DB_UPDATE_DATA_ERROR);

@@ -145,4 +145,23 @@ class UserController extends BaseController
         ];
         responseOK($data);
     }
+
+    /**
+     * @throws ApiException
+     */
+    public function actionDistribution()
+    {
+        if ($this->role != User::ROLE_ADMIN) {
+            throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
+        }
+        $userId = $this->safeGetParam("user_id");
+        $distribution = $this->safeGetParam("distribution");
+
+        $user = User::findOne($userId);
+        $distributionArr = json_decode($distribution, true);
+        if (empty($user) || !is_array($distribution)) {
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
+
+    }
 }
