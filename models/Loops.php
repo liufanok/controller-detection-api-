@@ -115,7 +115,7 @@ class Loops extends ActiveRecord
                 $workshopIds = array_merge($workshopIds, $plantWorkshopIds);
             }
 
-            if (empty($workshopIds) || !in_array($workshopId, $workshopIds)) {
+            if (empty($workshopIds) || ($workshopId && !in_array($workshopId, $workshopIds))) {
                 return [
                     'count' => 0,
                     'data' => [],
@@ -131,7 +131,7 @@ class Loops extends ActiveRecord
             ->select(['loops.id', 'loops.name loop_name', 'w.name'])
             ->innerJoin('workshop w', 'w.id = loops.workshop_id')
             ->filterWhere(['w.id' => $workshopIds])
-            ->andFilterWhere(['like', 'name', $name]);
+            ->andFilterWhere(['like', 'loops.name', $name]);
         $count = $query->count();
         $offset = ($page - 1) * $limit;
         $list = $query->offset($offset)
