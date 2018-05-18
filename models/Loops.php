@@ -146,6 +146,64 @@ class Loops extends ActiveRecord
     }
 
     /**
+     * 导出的数据
+     * @param User $user
+     * @return array|ActiveRecord[]
+     */
+    public static function getAllLoopsData(User $user)
+    {
+        $role = $user->roles;
+        $userId = $user->getId();
+        $workshopIds = [];
+        if ($role == User::ROLE_NORMAL) {
+            $userBelong = UserBelong::find()
+                ->select(['belong_id', 'belong_type'])
+                ->where(['user_id' => $userId])
+                ->asArray()
+                ->all();
+            $plantIds = [];
+            foreach ($userBelong as $item) {
+                if ($item['belong_type'] == UserBelong::BELONG_TYPE_WORKSHOP) {
+                    $workshopIds[] = $item['belong_id'];
+                }
+                if ($item['belong_type'] == UserBelong::BELONG_TYPE_PLANT) {
+                    $plantIds[] = $item['belong_id'];
+                }
+            }
+            if (!empty($plantIds)) {
+                $plantWorkshopIds = Workshop::find()
+                    ->select(['id'])
+                    ->where(['plant_id' => $plantIds])
+                    ->asArray()
+                    ->all();
+                $plantWorkshopIds = array_column($plantWorkshopIds, 'id');
+                $workshopIds = array_merge($workshopIds, $plantWorkshopIds);
+            }
+
+            if (empty($workshopIds)) {
+                return [];
+            }
+        }
+
+        //回路的数据
+        $list = Loops::find()
+            ->select(['loops.id', 'loops.name loop_name', 'p.name plant_name', 'w.name workshop_name'])
+            ->innerJoin('workshop w', 'w.id = loops.workshop_id')
+            ->innerJoin('plant_workshop pw', 'pw.workshop_id = w.id')
+            ->innerJoin('plant p', 'p.id = pw.plant_id')
+            ->filterWhere(['w.id' => $workshopIds])
+            ->asArray()
+            ->orderBy(['id' => SORT_ASC])
+            ->all();
+        $loopIds = array_column($list, 'id');
+        $count = Result::getCountByLoopIds($loopIds);
+        foreach ($list as &$item) {
+            $item['report_count'] = intval($count[$item['id']]);
+        }
+        return $list;
+    }
+
+    /**
      * 判断一个用户是否有权限查看某个回路
      * @param User $user
      * @param $loopId

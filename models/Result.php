@@ -62,6 +62,22 @@ class Result extends ActiveRecord
     }
 
     /**
+     * 获取报告的个数
+     * @param $loopIds
+     * @return array|ActiveRecord[]
+     */
+    public static function getCountByLoopIds($loopIds)
+    {
+        $count = self::find()
+            ->select(['loop_id', 'count(*) num'])
+            ->where(['loop_id' => $loopIds])
+            ->groupBy('loop_id')
+            ->asArray()
+            ->all();
+        return $count ? array_column($count, 'num', 'loop_id') : [];
+    }
+
+    /**
      * 报告的数据
      * @param Result $result
      * @return array

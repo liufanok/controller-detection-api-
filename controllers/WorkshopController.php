@@ -50,6 +50,9 @@ class WorkshopController extends BaseController
         $name = $this->safeGetParam("name");
         $plantId = $this->safeGetParam("plant_id");
 
+        if (empty($name)) {
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
         if (!Plant::findOne($plantId)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }

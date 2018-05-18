@@ -48,9 +48,12 @@ class LoopsController extends BaseController
         if ($this->role != User::ROLE_ADMIN) {
             throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
         }
-
         $workshopId = $this->safeGetParam("workshop_id");
         $name = $this->safeGetParam("name");
+
+        if (empty($workshopId) || empty($name)) {
+            throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
+        }
         if (!Workshop::findOne($workshopId)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
@@ -145,16 +148,16 @@ class LoopsController extends BaseController
     }
 
     /**
+     * 导出某个用户的回路列表
      * @throws \PHPExcel_Exception
      * @throws \PHPExcel_Reader_Exception
      */
     public function actionExport()
     {
-        $data = [
-            [1,2]
-        ];
-        ExcelHelper::exportExcel( 'a', '学生列表',
-            ['姓名', '学号'], $data);
+        $user = \Yii::$app->user->identity;
+        $data = Loops::getAllLoopsData($user);
+        $fileName = $user->username . "的回路列表.xlsx";
+        ExcelHelper::exportExcel($fileName, '回路列表', ['ID', '回路名称', '所属厂区', '所属车间', '报告数量'], $data);
         responseOK();
     }
 }
