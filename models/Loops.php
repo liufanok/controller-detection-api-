@@ -115,7 +115,7 @@ class Loops extends ActiveRecord
                 $workshopIds = array_merge($workshopIds, $plantWorkshopIds);
             }
 
-            if (empty($workshopIds)) {
+            if (empty($workshopIds) || !in_array($workshopId, $workshopIds)) {
                 return [
                     'count' => 0,
                     'data' => [],
@@ -179,14 +179,14 @@ class Loops extends ActiveRecord
                     ->asArray()
                     ->all();
                 $plantWorkshopIds = array_column($plantWorkshopIds, 'id');
-                $workshopIds = array_merge($workshopIds, $plantWorkshopIds);
+                $workshopIds = array_unique(array_merge($workshopIds, $plantWorkshopIds));
             }
 
             if (empty($workshopIds)) {
                 return false;
             }
             $loops = Loops::find()
-                ->where(['and', 'loop_id' => $loopId, 'workshop_id' => $workshopIds])
+                ->where(['and',['id' => $loopId], ['workshop_id' => $workshopIds]])
                 ->asArray()
                 ->all();
             return !empty($loops);
