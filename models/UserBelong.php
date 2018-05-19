@@ -82,4 +82,42 @@ class UserBelong extends ActiveRecord
         }
         return $data;
     }
+
+    /**
+     * 更新分配的厂区车间
+     * @param User $user
+     * @param $disArr
+     * @return bool
+     * @throws \yii\db\Exception
+     */
+    public static function distribution(User $user, $disArr)
+    {
+        $userId = $user->getId();
+        $data = [];
+        foreach ($disArr as $item) {
+            if (empty($item['workshop_id'])) {
+                $type = 2;
+                $beongId = $item['plant_id'];
+            } else {
+                $type = 1;
+                $beongId = $item['workshop_id'];
+            }
+            $data[] = [
+                'user_id' => $userId,
+                'belong_type' => $type,
+                'belong_id' => $beongId,
+            ];
+        }
+
+        $innerTransaction = \Yii::$app->db->beginTransaction();//事务开始
+        try {
+            UserBelong::deleteAll(['user_id' => $userId]);
+            \Yii::$app->db->createCommand()->batchInsert('user_belong', ['user_id', 'belong_type', 'belong_id'], $data)->execute();
+            $innerTransaction->commit();
+        } catch (\Exception $e) {
+            $innerTransaction->rollBack();
+            return false;
+        }
+        return true;
+    }
 }

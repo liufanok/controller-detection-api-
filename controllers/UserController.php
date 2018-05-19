@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\ApiCodeDesc;
 use app\models\ApiException;
 use app\models\User;
+use app\models\UserBelong;
 
 class UserController extends BaseController
 {
@@ -147,7 +148,9 @@ class UserController extends BaseController
     }
 
     /**
+     * 分配厂区/车间
      * @throws ApiException
+     * @throws \yii\db\Exception
      */
     public function actionDistribution()
     {
@@ -162,6 +165,11 @@ class UserController extends BaseController
         if (empty($user) || !is_array($distribution)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
-
+        $res = UserBelong::distribution($user, $distributionArr);
+        if ($res) {
+            responseOK();
+        } else {
+            throw new ApiException(ApiCodeDesc::ERR_DB_UPDATE_DATA_ERROR);
+        }
     }
 }
