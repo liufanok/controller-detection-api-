@@ -71,7 +71,8 @@ class UserBelong extends ActiveRecord
                 'plant_name' => $item['plant_name'],
                 'workshop_id' => $item['workshop_id'],
                 'workshop_name' => $item['workshop_name'],
-                'full_name' => "{$item['plant_name']}-{$item['workshop_name']}"
+                'full_name' => "{$item['plant_name']}-{$item['workshop_name']}",
+                'workshop_list' => Workshop::getByPlantId($item['plant_id']),
             ];
         }
 

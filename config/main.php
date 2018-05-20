@@ -27,6 +27,8 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+                '/api/v1/loops/export' => 'loops/export',
+                '/api/v1/user/template' => 'user/template',
                 'POST /api/v1/<controller:[\w-]+>/<action:[\w-]+>' => '<controller>/<action>',
             ],
         ],

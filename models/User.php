@@ -306,8 +306,11 @@ class User extends ActiveRecord implements IdentityInterface
             throw new ApiException(ApiCodeDesc::EMAIL_EXISTS);
         }
 
-        $user -> setAttributes(['phone' => $phone, 'email' => $email, 'status' => $status, 'roles' => $role]);
-        $user -> save();
+        $user->status = $status;
+        $user->roles = $role;
+        $user->phone = $phone;
+        $user->email = $email;
+        $user->save();
 
         return true;
     }

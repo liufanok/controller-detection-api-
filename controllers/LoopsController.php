@@ -156,7 +156,7 @@ class LoopsController extends BaseController
     {
         $user = \Yii::$app->user->identity;
         $data = Loops::getAllLoopsData($user);
-        $fileName = $user->username . "的回路列表.xlsx";
+        $fileName = $user->username . "的回路列表";
         ExcelHelper::exportExcel($fileName, '回路列表', ['ID', '回路名称', '所属厂区', '所属车间', '报告数量'], $data);
         responseOK();
     }

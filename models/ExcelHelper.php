@@ -64,9 +64,9 @@ class ExcelHelper {
             $rowNum ++;
 
         }
-        if(count($data) == 0){
-            $objPHPExcel->getActiveSheet ()->setCellValue ( 'A2', '未找到数据' );
-        }
+//        if(count($data) == 0){
+//            $objPHPExcel->getActiveSheet ()->setCellValue ( 'A2', '未找到数据' );
+//        }
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex ( 0 );
 

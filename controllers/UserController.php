@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\ApiCodeDesc;
 use app\models\ApiException;
+use app\models\ExcelHelper;
 use app\models\User;
 use app\models\UserBelong;
 
@@ -91,6 +92,7 @@ class UserController extends BaseController
             throw new ApiException(ApiCodeDesc::ERR_HAS_NO_ACCESS);
         }
 
+        require_once('../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
         $filePath = $_FILES['file']['tmp_name'];
         $phpExcelReader = new \PHPExcel_Reader_Excel2007();
         if (!$phpExcelReader->canRead($filePath)) {
@@ -148,6 +150,17 @@ class UserController extends BaseController
     }
 
     /**
+     * 批量导入用户模板
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public static function actionTemplate()
+    {
+        ExcelHelper::exportExcel('批量导入用户', '批量导入', ['用户名', '手机号', '邮箱'], []);
+        responseOK();
+    }
+
+    /**
      * 分配厂区/车间
      * @throws ApiException
      * @throws \yii\db\Exception
@@ -162,7 +175,7 @@ class UserController extends BaseController
 
         $user = User::findOne($userId);
         $distributionArr = json_decode($distribution, true);
-        if (empty($user) || !is_array($distribution)) {
+        if (empty($user) || !is_array($distributionArr)) {
             throw new ApiException(ApiCodeDesc::ERR_PARAM_INVALID);
         }
         $res = UserBelong::distribution($user, $distributionArr);
